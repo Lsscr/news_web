@@ -2,12 +2,12 @@
   <div class="joke-root">
     <template>
       <el-tabs class="tabs" v-model="activeName" @tab-click="handleClick">
-        <el-tab-pane label="全部" name="-1"></el-tab-pane>
-        <el-tab-pane label="经典" name="0"></el-tab-pane>
-        <el-tab-pane label="荤笑话" name="1"></el-tab-pane>
-        <el-tab-pane label="精分" name="2"></el-tab-pane>
-        <el-tab-pane label="脑残" name="3"></el-tab-pane>
-        <el-tab-pane label="冷笑话" name="4"></el-tab-pane>
+        <el-tab-pane label="全部" name="1"></el-tab-pane>
+        <el-tab-pane label="要闻" name="2"></el-tab-pane>
+        <el-tab-pane label="财经" name="3"></el-tab-pane>
+        <el-tab-pane label="环球" name="4"></el-tab-pane>
+        <el-tab-pane label="娱乐" name="5"></el-tab-pane>
+        <el-tab-pane label="体育" name="6"></el-tab-pane>
       </el-tabs>
     </template>
     <div v-if="isShowBanner" class="banner">
@@ -55,19 +55,19 @@ export default {
     }
   },
   methods: {
-    getJokes(tag) {
+    getJokes(page) {
       this.showInfo = "加载中..";
       this.$axios
-        .get(`/joke/jokelist`, {
+        .get(`/article/jokedetaillist`, {
           params: {
-            page: this.page,
+            pageNum: page,
             row: this.row,
-            tag: tag,
+            tag: page,
           },
         })
         .then((response) => {
           const joker = response.data;
-          const data = joker.data;
+          const data = joker.data.records;
           // this.tableData = [];
           if (data.length < this.row) {
             this.showInfo = "没有数据了~";
@@ -128,7 +128,7 @@ export default {
         });
     },
     handleClick(tab, event) {
-      if (this.activeName === "-1") {
+      if (this.activeName === "1") {
         this.isShowBanner = true;
       } else {
         this.isShowBanner = false;

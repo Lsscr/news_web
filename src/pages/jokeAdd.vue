@@ -26,12 +26,12 @@
                 </el-form-item>
                 <el-form-item label="选择标签" prop='tags'>
                     <el-checkbox-group v-model="ruleForm.tags">
-                        <el-checkbox name='tags' label="0" border size="medium">经典</el-checkbox>
-                        <el-checkbox name='tags' label="1" border size="medium">荤笑话</el-checkbox>
-                        <el-checkbox name='tags' label="2" border size="medium">精分</el-checkbox>
+                        <el-checkbox name='tags' label="0" border size="medium">要闻</el-checkbox>
+                        <el-checkbox name='tags' label="1" border size="medium">财经</el-checkbox>
+                        <el-checkbox name='tags' label="2" border size="medium">环球</el-checkbox>
                         <div style="margin-top: 10px">
-                            <el-checkbox name='tags' label="3" border size="medium">脑残</el-checkbox>
-                            <el-checkbox name='tags' label="4" border size="medium">冷笑话</el-checkbox>
+                            <el-checkbox name='tags' label="3" border size="medium">娱乐</el-checkbox>
+                            <el-checkbox name='tags' label="4" border size="medium">体育</el-checkbox>
                         </div>
                     </el-checkbox-group>
                 </el-form-item>
@@ -129,7 +129,7 @@ export default {
             });
         },
         addJokes() {
-            this.$axios.post(`/joke/add`, {
+            this.$axios.post(`/article/release`, {
                     title: this.ruleForm.title,
                     jokeUserId: this.userInfo.userId,
                     content: this.getEtText(),
@@ -140,10 +140,10 @@ export default {
                 })
                 .then((response) => {
                     const result = response.data;
-                    if (result && result.code === 200) {
+                    if (result && result.code === '200') {
                         this.resetForm();
-                        this.openSuccess('恭喜，发表成功!');
-                    } else if (result.code === 201) {
+                        this.openSuccess('发表成功!');
+                    } else if (result.code === '201') {
                         this.openToast('发布失败，您处于禁言状态');
                     } else {
                         this.openToast('发布失败，服务器异常');

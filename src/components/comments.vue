@@ -137,28 +137,28 @@ export default {
       }
       this.$axios
         .post(
-          `/joke/comment/add`,
+          `/article/commentAdd`,
           this.$qs.stringify({
             jokeId: this.jokeId,
-            userId: this.userInfo.userId,
-            details: this.details,
+            commentUserId: this.userInfo.userId,
+            commentDetails: this.details,
           }),
         )
-
         .then((response) => {
           const result = response.data;
-          if (result && result.code === 200) {
-            const data = result.data[0];
+          console.log(result);
+          if (result.code === '200') {
+            const data = result.data;
             const tableData = {};
             tableData.commentDetails = data.commentDetails;
-            tableData.commentIcon = data.commentIcon;
-            tableData.commentNick = data.commentNick;
+            // tableData.commentIcon = data.commentIcon;
+            tableData.commentNick = '66666666';
             tableData.commentDate = data.commentDate;
             this.commentData.unshift(tableData);
             this.count++;
             this.details = "";
             this.increment();
-            this.openSuccess("恭喜，发布成功!");
+            this.openSuccess("发布成功!");
           } else if (result.code === 201) {
             this.openToast("发布失败，您处于禁言状态");
           } else {

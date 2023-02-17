@@ -40,16 +40,14 @@ export default {
         return;
       }
       this.$axios
-        .get(`/joke/jokelist/foggy`, {
+        .get(`/article/search`, {
           params: {
-            page: this.page,
-            row: this.row,
-            key: encodeURI(key),
+            words: key,
           },
         })
         .then((response) => {
           const joker = response.data;
-          if (joker.code === 200) {
+          if (joker.code === '200') {
             const data = joker.data;
             this.count = joker.total;
             this.tableData = [];

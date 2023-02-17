@@ -2,7 +2,7 @@
   <div class="head-root">
     <div class="head-item">
       <a href="/">
-        <span class="head-words">WCDOG</span>
+        <span class="head-words">新闻网</span>
       </a>
       <div class="search-root">
         <el-input
@@ -204,18 +204,16 @@ export default {
       });
     },
     login() {
-      this.$axios
-        .post(
-          `/user/login`,
-          this.$qs.stringify({
-            name: this.ruleForm.name,
-            psw: this.ruleForm.pass,
-          }),
-        )
+      this.$axios.post(`/logins`,null,{
+            params:{
+              name:this.ruleForm.name,
+              password:this.ruleForm.pass,
+            }
+          })
         .then((response) => {
           const user = response.data;
-          if (user.code === 200) {
-            const userBean = user.data[0];
+          if (user.code === '200') {
+            const userBean = user.data;
             this.loginDialogShow = false;
             this.userBean = userBean;
             this.isShowUser = !this.isShowUser;
@@ -232,17 +230,17 @@ export default {
     regist() {
       this.$axios
         .post(
-          `/user/regist`,
+          `/register`,
           this.$qs.stringify({
             name: this.ruleFormRegist.name,
-            psw: this.ruleFormRegist.pass,
+            password: this.ruleFormRegist.pass,
             nickname: this.ruleFormRegist.nickname,
           }),
         )
         .then((response) => {
           const user = response.data;
-          if (user.code === 200) {
-            const userBean = user.data[0];
+          if (user.code === '200') {
+            const userBean = user.data;
             this.loginDialogShow = false;
             this.userBean = userBean;
             this.isShowUser = !this.isShowUser;

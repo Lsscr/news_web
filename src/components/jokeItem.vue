@@ -100,7 +100,7 @@ export default {
         })
         .then((response) => {
           const result = response.data;
-          if (result && result.code === 200) {
+          if (result && result.code === '200') {
             this.openSuccess("点赞成功!");
             this.bean.articleLikeCount = this.bean.articleLikeCount + 1;
           } else {
