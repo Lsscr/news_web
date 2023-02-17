@@ -50,9 +50,9 @@ export default {
 
         },
         getJokeDetails() {
-            this.$axios.get(`/joke/jokeDetails`, {
+            this.$axios.get(`/article/jokedetail`, {
                     params: {
-                        jokeId: this.jokeId
+                        jokeid: this.jokeId
                     }
                 })
                 .then((response) => {
@@ -61,10 +61,8 @@ export default {
                     this.jokeDetails = {};
                     this.jokeDetails = item;
                     if (item.category) {
-                        this.jokeDetails.category = JOKE_CATEGORY[item.category];
-                    } else {
-                        this.jokeDetails.category = JOKE_CATEGORY['0'];
-                    }
+                        this.jokeDetails.category = item.category;
+                    } 
                     if (item.tags) {
                         this.jokeDetails.tags = JSON.parse(item.tags);
                     } else {

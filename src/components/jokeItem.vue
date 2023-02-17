@@ -18,7 +18,7 @@
           <span>{{ bean.content }}</span>
         </div>
         <div class="approval">
-          <span>
+          <span class="like-count">
             <img @click="approvalJoke" src="../assets/approval.png" alt="" />
             {{ bean.articleLikeCount }}
           </span>
@@ -92,17 +92,17 @@ export default {
         return;
       }
       this.$axios
-        .get(`/joke/joke/thumbs`, {
+        .post(`/article/addlike`,null, {
           params: {
-            jokeId: this.bean.jokeId,
-            jokeUserId: this.userInfo.userId,
+            jokeid: this.bean.jokeId,
+            jokeuserid: this.userInfo.userId,
           },
         })
         .then((response) => {
           const result = response.data;
           if (result && result.code === '200') {
             this.openSuccess("点赞成功!");
-            this.bean.articleLikeCount = this.bean.articleLikeCount + 1;
+            this.bean.articleLikeCount = result.data;
           } else {
             this.openWarning(result.msg);
           }
@@ -124,6 +124,24 @@ export default {
       });
     },
   },
+  created(){
+    this.$axios.post('/user/userlike',null,{
+      params:{
+        jokeId:this.bean.jokeId,
+      }
+    })
+    .then((response) => {
+          const result = response.data;
+          if (result && result.code === '200') {
+            this.bean.articleLikeCount = result.data;
+          } else {
+            this.openWarning(result.msg);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+  }
 };
 </script>
 <style lang="scss">
@@ -138,7 +156,9 @@ item-span {
   padding: 20px 10px;
   border-bottom: 1px solid #f0f0f0;
 }
-
+.like-count {
+  color: $text_blue;
+}
 .content {
   display: flex;
   width: 100%;
