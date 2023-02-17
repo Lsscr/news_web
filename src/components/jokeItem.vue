@@ -71,7 +71,7 @@ export default {
     },
 
     increment() {
-      this.bean.articleCommentCount = this.bean.articleCommentCount + 1;
+      this.bean.articleCommentCount = this.bean.articleCommentCount;
     },
     toUserView() {
       if (this.userInfo && this.bean.jokeUserId === this.userInfo.userId) {
@@ -92,7 +92,7 @@ export default {
         return;
       }
       this.$axios
-        .post(`/article/addlike`,null, {
+        .post(`/article/addlike`, null, {
           params: {
             jokeid: this.bean.jokeId,
             jokeuserid: this.userInfo.userId,
@@ -100,7 +100,7 @@ export default {
         })
         .then((response) => {
           const result = response.data;
-          if (result && result.code === '200') {
+          if (result && result.code === "200") {
             this.openSuccess("点赞成功!");
             this.bean.articleLikeCount = result.data;
           } else {
@@ -123,16 +123,16 @@ export default {
         type: "success",
       });
     },
-  },
-  created(){
-    this.$axios.post('/user/userlike',null,{
-      params:{
-        jokeId:this.bean.jokeId,
-      }
-    })
-    .then((response) => {
+    getLikeCount() {
+      this.$axios
+        .post("/user/userlike", null, {
+          params: {
+            jokeId: this.bean.jokeId,
+          },
+        })
+        .then((response) => {
           const result = response.data;
-          if (result && result.code === '200') {
+          if (result && result.code === "200") {
             this.bean.articleLikeCount = result.data;
           } else {
             this.openWarning(result.msg);
@@ -141,7 +141,31 @@ export default {
         .catch((error) => {
           console.log(error);
         });
-  }
+    },
+    getCommentCount() {
+      this.$axios
+        .get("/article/commentCount", {
+          params: {
+            jokeId: this.bean.jokeId,
+          },
+        })
+        .then((response) => {
+          const result = response.data;
+          if (result && result.code === "200") {
+            this.bean.articleCommentCount = result.data;
+          } else {
+            this.openWarning(result.msg);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+  },
+  created() {
+    this.getLikeCount();
+    this.getCommentCount();
+  },
 };
 </script>
 <style lang="scss">

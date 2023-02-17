@@ -97,7 +97,7 @@ export default {
     },
     getJokeComments() {
       this.$axios
-        .get(`/joke/comment/list`, {
+        .get(`/article/commentList`, {
           params: {
             page: this.page,
             row: this.row,
@@ -106,21 +106,23 @@ export default {
         })
         .then((response) => {
           const joker = response.data;
-          const data = joker.data;
-          this.count = joker.total;
+          const data = joker.data.records;
+          this.count = data.length;
           this.commentData = [];
-          data.forEach((item) => {
-            const tableData = {};
-            tableData.commentDate = item.commentDate;
-            tableData.commentDetails = item.commentDetails;
-            tableData.commentIcon = item.commentIcon;
-            tableData.commentId = item.commentId;
-            tableData.commentNick = item.commentNick;
-            tableData.commentUserId = item.commentUserId;
-            tableData.jokeId = item.jokeId;
+          if (data.length > 0) {
+            data.forEach((item) => {
+              const tableData = {};
+              tableData.commentDate = item.commentDate;
+              tableData.commentDetails = item.commentDetails;
+              tableData.commentIcon = item.commentIcon;
+              tableData.commentId = item.commentId;
+              tableData.commentNick = "匿名用户";
+              tableData.commentUserId = item.commentUserId;
+              tableData.jokeId = item.jokeId;
 
-            this.commentData.push(tableData);
-          });
+              this.commentData.push(tableData);
+            });
+          }
         })
         .catch((error) => {
           console.log(error);
@@ -147,12 +149,12 @@ export default {
         .then((response) => {
           const result = response.data;
           console.log(result);
-          if (result.code === '200') {
+          if (result.code === "200") {
             const data = result.data;
             const tableData = {};
             tableData.commentDetails = data.commentDetails;
             // tableData.commentIcon = data.commentIcon;
-            tableData.commentNick = '66666666';
+            tableData.commentNick = "66666666";
             tableData.commentDate = data.commentDate;
             this.commentData.unshift(tableData);
             this.count++;
@@ -185,6 +187,9 @@ export default {
         type: "success",
       });
     },
+  },
+  created() {
+    this.getJokeComments();
   },
 };
 </script>
