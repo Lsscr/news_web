@@ -32,11 +32,7 @@
         </div>
         <el-dropdown @command="dealCommand" style="font-size: 12px" v-if="isShowUser" trigger="click">
           <div class="user-name">
-            <img
-              class="user-ic"
-              :src="userBean.userIcon === null ? require(`@/assets/wc_app.jpg`) : userBean.userIcon"
-              alt=""
-            />
+            <img class="user-ic" :src="require(`@/assets/wc_app.jpg`)" alt="" />
             <span>{{ userBean.nickname }}</span>
           </div>
           <el-dropdown-menu slot="dropdown">
@@ -44,7 +40,7 @@
               <span class="center-ic"><img src="../assets/userCenter_ic.png" alt="" />主页</span>
             </el-dropdown-item>
             <el-dropdown-item command="userWrite">
-              <span class="center-ic"><img src="../assets/userwrite_ic.png" alt="" />写段子</span>
+              <span class="center-ic"><img src="../assets/userwrite_ic.png" alt="" />编写</span>
             </el-dropdown-item>
             <el-dropdown-item command="userExit">
               <span class="center-ic"><img src="../assets/userExit_ic.png" alt="" />退出</span>
@@ -204,15 +200,16 @@ export default {
       });
     },
     login() {
-      this.$axios.post(`/logins`,null,{
-            params:{
-              name:this.ruleForm.name,
-              password:this.ruleForm.pass,
-            }
-          })
+      this.$axios
+        .post(`/logins`, null, {
+          params: {
+            name: this.ruleForm.name,
+            password: this.ruleForm.pass,
+          },
+        })
         .then((response) => {
           const user = response.data;
-          if (user.code === '200') {
+          if (user.code === "200") {
             const userBean = user.data;
             this.loginDialogShow = false;
             this.userBean = userBean;
@@ -239,7 +236,7 @@ export default {
         )
         .then((response) => {
           const user = response.data;
-          if (user.code === '200') {
+          if (user.code === "200") {
             const userBean = user.data;
             this.loginDialogShow = false;
             this.userBean = userBean;

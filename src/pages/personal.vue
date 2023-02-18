@@ -1,11 +1,7 @@
 <template>
   <div class="personal-root">
     <div class="personal-info">
-      <img
-        class="personal-ic"
-        :src="userInfo.userIcon === null ? require(`@/assets/wc_app.jpg`) : userInfo.userIcon"
-        alt=""
-      />
+      <img class="personal-ic" :src="require(`@/assets/wc_app.jpg`)" alt="" />
       <div>
         <div class="personal-name-root">
           <span class="personal-name">{{ userInfo.nickname }}</span>
@@ -91,7 +87,7 @@ export default {
       page: 1,
       row: 10,
       activeName: "0",
-      selfUrl: `/user/selfJokes`,
+      selfUrl: `/user/userSelf`,
       isShowEdit: false,
     };
   },
@@ -111,7 +107,13 @@ export default {
         })
         .then((response) => {
           const joker = response.data;
-          const data = joker.data;
+          let data = [];
+          if (this.selfUrl === "/user/userSelf") {
+            data = joker.data.records;
+          } else {
+            data = joker.data;
+          }
+
           this.tableData = [];
           data.forEach((item) => {
             const tableData = {};
@@ -148,7 +150,7 @@ export default {
       console.log(this.activeName);
       switch (this.activeName) {
         case "0":
-          this.selfUrl = `/user/selfJokes`;
+          this.selfUrl = `/user/userSelf`;
           break;
         case "1":
           break;

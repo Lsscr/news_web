@@ -64,7 +64,7 @@ export default {
     },
     getSelfJokes() {
       this.$axios
-        .get(`/user/selfJokes`, {
+        .get("/user/userSelf", {
           params: {
             page: this.page,
             row: this.row,
@@ -73,7 +73,7 @@ export default {
         })
         .then((response) => {
           const joker = response.data;
-          const data = joker.data;
+          const data = joker.data.records;
           this.tableData = [];
           data.forEach((item) => {
             const tableData = {};

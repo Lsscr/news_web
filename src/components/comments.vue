@@ -5,12 +5,13 @@
       <div v-for="item in commentData" class="comment-info-root" :key="item">
         <div class="comment-user-info">
           <div>
-            <img
+            <!-- <img
               :src="item.commentIcon === null ? require(`@/assets/wc_app.jpg`) : item.commentIcon"
               alt=""
               class="comment-ic"
               @click="toUserView(item)"
-            />
+            /> -->
+            <img :src="require(`@/assets/wc_app.jpg`)" alt="" class="comment-ic" @click="toUserView(item)" />
             <span style="cursor: default" @click="toUserView(item)">{{ item.commentNick }}</span>
           </div>
         </div>
@@ -43,7 +44,7 @@
         style="width: 700px"
       >
       </el-input>
-      <el-button @click="addComment" type="primary" size="small" style="margin-left: 10px">发布</el-button>
+      <el-button @click="addComment" type="primary" size="small" style="margin-left: 10px">评论</el-button>
     </div>
   </div>
 </template>
@@ -154,7 +155,7 @@ export default {
             const tableData = {};
             tableData.commentDetails = data.commentDetails;
             // tableData.commentIcon = data.commentIcon;
-            tableData.commentNick = "66666666";
+            tableData.commentNick = "匿名用户";
             tableData.commentDate = data.commentDate;
             this.commentData.unshift(tableData);
             this.count++;

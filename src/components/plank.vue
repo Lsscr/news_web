@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="plank-text">
-      <span>~公告~</span>
+      <span>~最新公告~</span>
       <span>{{ lastPlank.content }}</span>
       <span class="plank-time" style="font-size: 12px">{{ lastPlank.sendTimeStr }}</span>
     </div>
@@ -25,15 +25,11 @@
               slot="reference"
               @click="toUserView(item)"
               class="plank-user-ic"
-              :src="item.userIcon === null ? require(`@/assets/wc_app.jpg`) : item.userIcon"
+              :src="require(`@/assets/wc_app.jpg`)"
               alt=""
             />
             <div class="talk-qr-root">
-              <img
-                class="talk-qr-ic"
-                :src="item.userIcon === null ? require(`@/assets/wc_app.jpg`) : item.userIcon"
-                alt=""
-              />
+              <img class="talk-qr-ic" :src="require(`@/assets/wc_app.jpg`)" alt="" />
               <div class="talk-qr-tip">
                 <span>{{ item.userNick }}</span>
                 <span>{{ item.talk }}</span>
@@ -70,39 +66,34 @@ export default {
   methods: {
     getLastPlank() {
       this.$axios
-        .get(`/plank/planktalk/lastplank`)
+        .get("/plank/getLatestPlank")
         .then((response) => {
           const result = response.data;
-          const data = result.data[0];
+          const data = result.data;
           this.lastPlank.content = data.content;
-          this.lastPlank.sendTimeStr = data.sendTimeStr;
+          this.lastPlank.sendTimeStr = data.sendTime;
         })
         .catch((error) => {
           this.lastPlank.content = "暂无公告";
-          console.log(error);
         });
     },
     getTalkList() {
       this.$axios
-        .get(`/plank/talkList`, {
-          params: {
-            size: 5,
-          },
-        })
+        .get(`/plank/getPlank`)
         .then((response) => {
           const result = response.data;
           const data = result.data;
+          console.log(data);
           this.talkData = [];
           data.forEach((item) => {
             const talkItem = {};
-            talkItem.talk = item.talk;
-            talkItem.userIcon = item.userIcon;
+            talkItem.talk = item.content;
             talkItem.userId = item.userId;
-            talkItem.userNick = item.userNick;
-            talkItem.sendTime = item.sendTime;
-            talkItem.sendTimeStr = item.sendTimeStr;
+            talkItem.userNick = "匿名";
+            talkItem.sendTimeStr = item.sendTime;
             this.talkData.push(talkItem);
           });
+          this.talkData = this.talkData.reverse();
         })
         .catch((error) => {
           console.log(error);
@@ -119,29 +110,27 @@ export default {
       }
       this.$axios
         .post(
-          `/plank/add`,
+          `/plank/postPlank`,
           this.$qs.stringify({
-            userId: this.userInfo.userId,
-            talk: this.myTalk,
+            content: this.myTalk,
           }),
         )
         .then((response) => {
           const result = response.data;
-          if (result && result.code === 200) {
+          if (result && result.code === "200") {
             this.openSuccess("恭喜，发表成功!");
-            const data = result.data[0];
+            // const data = result.data[0];
             let tableData = {};
-            tableData.userIcon = data.userIcon;
-            tableData.userNick = data.userNick;
-            tableData.talk = data.talk;
+            tableData.userNick = "匿名";
+            tableData.talk = this.myTalk;
             tableData.sendTimeStr = "刚刚";
-            tableData.userId = data.userId;
+            // tableData.userId = data.userId;
             this.talkData.unshift(tableData);
             if (this.talkData.length > 5) {
               this.talkData.pop();
             }
             this.myTalk = "";
-          } else if (result.code === 201) {
+          } else if (result.code === "201") {
             this.openToast("发布失败，您处于禁言状态");
           } else {
             this.openToast("发布失败，服务器异常");
@@ -214,11 +203,16 @@ export default {
   width: 200px;
   height: 400px;
   top: 230px;
+  overflow: auto;
+  overflow-x: hidden;
   background-color: white;
   margin-left: 10px;
   box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
   position: fixed;
   padding: 10px;
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
 }
 
 .plank-item {
